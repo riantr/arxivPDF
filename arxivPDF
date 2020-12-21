@@ -7,7 +7,7 @@ else
     if [ ! -d $HOME/papers ]; then
         mkdir -p $HOME/papers/arxiv
     fi
-    find $HOME/papers -type f -name $1.pdf
+    find $HOME/papers -type f -name $1.pdf > /dev/null 2>&1
     if [ $? != 0 ] && [ -z $2 ]; then
         if [ ! -f $HOME/papers/arxiv/$1.pdf ]; then
             curl https://arxiv.org/pdf/$1.pdf > $HOME/papers/arxiv/$1.pdf
@@ -16,8 +16,11 @@ else
         if [ ! -d $HOME/papers/$2 ]; then
             mkdir $HOME/papers/$2
         fi
-        if [ ! -f $HOME/papers/$2/$1.pdf ]; then
+        find $HOME/papers -type f -name $1.pdf > /dev/null 2>&1
+        if [ $? != 0 ] && [ ! -f $HOME/papers/$2/$1.pdf ]; then
             curl https://arxiv.org/pdf/$1.pdf > $HOME/papers/$2/$1.pdf
+        else
+            find $HOME/papers -type f -name $1.pdf -exec mv {}  $HOME/papers/$2/$1.pdf \; 
         fi
     else
         find $HOME/papers -type f -name $1.pdf -exec mv {}  $HOME/papers/$2/$1.pdf \; 
