@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ -z $1 ]; then
-    echo -e "Usage: arxivPDF xxxx.xxxx or arxivPDF xxxx.xxxx [tag]" 
+    echo -e "Usage: \"arxivPDF xxxx.xxxx\" or \"arxivPDF xxxx.xxxx [tag]\"" 
     echo -e "Papers will save to $HOME/papers/arxiv or $HOME/papers/[tag]." 
 else
     if [ ! -d $HOME/papers ]; then
