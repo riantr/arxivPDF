@@ -1,8 +1,14 @@
 # arxivPDF
 A little shell script for download ( and organize ) papers from arxiv.org.
 
-# Install
+# Install 
+- [Mac]
 $ brew install zathura <br>
+$ chmod +x arxivPDF <br>
+$ mv arxivPDF ~/.local/bin
+
+- [Linux]
+$ sudo apt install zathura <br>
 $ chmod +x arxivPDF <br>
 $ mv arxivPDF ~/.local/bin
 
