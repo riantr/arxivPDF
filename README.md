@@ -2,10 +2,10 @@
 A little shell script for download ( and organize ) papers from arxiv.org.
 
 # Install
-brew install zathura <br>
-chmod +x arxivPDF <br>
-mv arxivPDF ~/.local/bin
+$ brew install zathura <br>
+$ chmod +x arxivPDF <br>
+$ mv arxivPDF ~/.local/bin
 
 # Usage
-arxivPDF xxx.xxxxx [tag] <br>
+$arxivPDF xxx.xxxxx [tag] <br>
 example: arxivPDF 2004.10934 yolo
