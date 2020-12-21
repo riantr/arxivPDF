@@ -1,10 +1,5 @@
 #!/bin/bash
 
-function findPaper() {
-    find $HOME/papers -type f -name $1.pdf
-    return 0
-}
-
 if [ -z $1 ]; then
     echo -e "Usage: arxivPDF xxxx.xxxx or arxivPDF xxxx.xxxx [tag]" 
     echo -e "Papers will save to $HOME/papers/arxiv or $HOME/papers/[tag]." 
@@ -12,24 +7,20 @@ else
     if [ ! -d $HOME/papers ]; then
         mkdir -p $HOME/papers/arxiv
     fi
-    if findArticle; then
-        find $HOME/papers -type f -name $1.pdf -exec zathura {} \; 
-    elif [ -z $2 ]; then
+    find $HOME/papers -type f -name $1.pdf
+    if [ $? != 0 ] && [ -z $2 ]; then
         if [ ! -f $HOME/papers/arxiv/$1.pdf ]; then
             curl https://arxiv.org/pdf/$1.pdf > $HOME/papers/arxiv/$1.pdf
         fi
-        zathura $HOME/papers/arxiv/$1.pdf
-    else
+    elif [ $? != 0 ]; then
         if [ ! -d $HOME/papers/$2 ]; then
             mkdir $HOME/papers/$2
         fi
         if [ ! -f $HOME/papers/$2/$1.pdf ]; then
-            if [ ! -f $HOME/papers/arxiv/$1.pdf ]; then
-                curl https://arxiv.org/pdf/$1.pdf > $HOME/papers/$2/$1.pdf
-            else
-                mv $HOME/papers/arxiv/$1.pdf $HOME/papers/$2/
-            fi
+            curl https://arxiv.org/pdf/$1.pdf > $HOME/papers/$2/$1.pdf
         fi
-        zathura $HOME/papers/$2/$1.pdf
+    else
+        find $HOME/papers -type f -name $1.pdf -exec mv {}  $HOME/papers/$2/$1.pdf \; 
     fi
+    find $HOME/papers -type f -name $1.pdf -exec zathura {} \; 
 fi
