@@ -7,5 +7,6 @@ $ chmod +x arxivPDF <br>
 $ mv arxivPDF ~/.local/bin
 
 # Usage
-$arxivPDF xxx.xxxxx [tag] <br>
+$ arxivPDF xxx.xxxxx [tag] <br>
 example: arxivPDF 2004.10934 yolo
+
