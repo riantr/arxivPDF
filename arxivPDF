@@ -8,20 +8,16 @@ else
         mkdir -p $HOME/papers/arxiv
     fi
     find $HOME/papers -type f -name $1.pdf > /dev/null 2>&1
-    if [ $? != 0 ] && [ -z $2 ]; then
+    FOUND=$?
+    if [ $FOUND == 0 ] && [ -z $2 ]; then
         if [ ! -f $HOME/papers/arxiv/$1.pdf ]; then
             curl https://arxiv.org/pdf/$1.pdf > $HOME/papers/arxiv/$1.pdf
         fi
-    elif [ $? != 0 ]; then
+    elif [ $FOUND == 0 ]; then
         if [ ! -d $HOME/papers/$2 ]; then
             mkdir $HOME/papers/$2
         fi
-        find $HOME/papers -type f -name $1.pdf > /dev/null 2>&1
-        if [ $? != 0 ]; then
-            curl https://arxiv.org/pdf/$1.pdf > $HOME/papers/$2/$1.pdf
-        elif [ ! -f $HOME/papers/$2/$1.pdf ]; then
-            find $HOME/papers -type f -name $1.pdf -exec mv {}  $HOME/papers/$2/$1.pdf \; 
-        fi
+        curl https://arxiv.org/pdf/$1.pdf > $HOME/papers/$2/$1.pdf
     else
         find $HOME/papers -type f -name $1.pdf -exec mv {}  $HOME/papers/$2/$1.pdf \; 
     fi
