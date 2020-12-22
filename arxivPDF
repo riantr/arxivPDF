@@ -17,9 +17,9 @@ else
             mkdir $HOME/papers/$2
         fi
         find $HOME/papers -type f -name $1.pdf > /dev/null 2>&1
-        if [ $? != 0 ] && [ ! -f $HOME/papers/$2/$1.pdf ]; then
+        if [ $? != 0 ]; then
             curl https://arxiv.org/pdf/$1.pdf > $HOME/papers/$2/$1.pdf
-        else
+        elif [ ! -f $HOME/papers/$2/$1.pdf ]; then
             find $HOME/papers -type f -name $1.pdf -exec mv {}  $HOME/papers/$2/$1.pdf \; 
         fi
     else
