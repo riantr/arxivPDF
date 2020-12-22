@@ -1,4 +1,5 @@
 #!/bin/bash
+# Author: REN YongXiang  | riantr@gmail.com
 
 if [ -z $1 ]; then
     echo -e "Usage: \"arxivPDF xxxx.xxxx\" or \"arxivPDF xxxx.xxxx [tag]\"" 
@@ -8,24 +9,27 @@ else
         mkdir -p $HOME/papers/arxiv
     fi
     FOUND=`find $HOME/papers -type f -name $1.pdf` 
-    FOUND=`echo $FOUND | wc -c` 
-    if [ $FOUND == 1 ] && [ -z $2 ]; then
+    FOUNDstr=`echo $FOUND | wc -c` 
+    if [ $FOUNDstr == 1 ] && [ -z $2 ]; then
         if [ ! -f $HOME/papers/arxiv/$1.pdf ]; then
             curl https://arxiv.org/pdf/$1.pdf > $HOME/papers/arxiv/$1.pdf
         fi
-    elif [ $FOUND == 1 ]; then
+    elif [ $FOUNDstr == 1 ]; then
         if [ ! -d $HOME/papers/$2 ]; then
             mkdir $HOME/papers/$2
         fi
         curl https://arxiv.org/pdf/$1.pdf > $HOME/papers/$2/$1.pdf
     else
-        if [ ! -d $HOME/papers/$2 ]; then
+        if [ -z $2 ]; then
+            READABLE=`find $HOME/papers -type f -name $1.pdf -exec zathura {} \; `
+        elif [ ! -d $HOME/papers/$2 ]; then
             mkdir $HOME/papers/$2
+        elif [ ! -f $HOME/papers/$2/$1.pdf ]; then
+            find $HOME/papers -type f -name $1.pdf -exec mv {}  $HOME/papers/$2/$1.pdf \; 
         fi
-        find $HOME/papers -type f -name $1.pdf -exec mv {}  $HOME/papers/$2/$1.pdf \; 
     fi
     READABLE=`find $HOME/papers -type f -name $1.pdf -exec zathura {} \; `
-    if [ "$READABLE" != "error: could not open document" ]; then
+    if [ "$READABLE" == "error: could not open document" ]; then
         echo "CANTOT read"
         find $HOME/papers -type f -name $1.pdf -exec rm -i {} \;
     fi
