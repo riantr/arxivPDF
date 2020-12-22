@@ -7,19 +7,26 @@ else
     if [ ! -d $HOME/papers ]; then
         mkdir -p $HOME/papers/arxiv
     fi
-    find $HOME/papers -type f -name $1.pdf > /dev/null 2>&1
-    FOUND=$?
-    if [ $FOUND == 0 ] && [ -z $2 ]; then
+    FOUND=`find $HOME/papers -type f -name $1.pdf` 
+    FOUND=`echo $FOUND | wc -c` 
+    if [ $FOUND == 1 ] && [ -z $2 ]; then
         if [ ! -f $HOME/papers/arxiv/$1.pdf ]; then
             curl https://arxiv.org/pdf/$1.pdf > $HOME/papers/arxiv/$1.pdf
         fi
-    elif [ $FOUND == 0 ]; then
+    elif [ $FOUND == 1 ]; then
         if [ ! -d $HOME/papers/$2 ]; then
             mkdir $HOME/papers/$2
         fi
         curl https://arxiv.org/pdf/$1.pdf > $HOME/papers/$2/$1.pdf
     else
+        if [ ! -d $HOME/papers/$2 ]; then
+            mkdir $HOME/papers/$2
+        fi
         find $HOME/papers -type f -name $1.pdf -exec mv {}  $HOME/papers/$2/$1.pdf \; 
     fi
-    find $HOME/papers -type f -name $1.pdf -exec zathura {} \; 
+    READABLE=`find $HOME/papers -type f -name $1.pdf -exec zathura {} \; `
+    if [ "$READABLE" != "error: could not open document" ]; then
+        echo "CANTOT read"
+        find $HOME/papers -type f -name $1.pdf -exec rm -i {} \;
+    fi
 fi
